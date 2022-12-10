@@ -3,12 +3,12 @@ from snscrape.modules.twitter import TwitterSearchScraper
 from datetime import datetime
 
 
-def make_query(start_date: datetime, end_date: datetime, username: str=None, keyword: str=None):
+def make_query(start_date: str, end_date: str, username: str=None, keyword: str=None):
     """Constructs a query string depending on the parameters supplied
 
     Args:
-        start_date (datetime): the start date to begin scraping tweets from
-        end_date (datetime): the end date for scraping tweets
+        start_date (str): the start date to begin scraping tweets from
+        end_date (str): the end date for scraping tweets
         username (str, optional): a username, or user handle to scrape. Defaults to None.
         keyword (str, optional): a keyword or phrase to target during scrape. Defaults to None.
     """
@@ -20,9 +20,13 @@ def make_query(start_date: datetime, end_date: datetime, username: str=None, key
 
     elif username is not None and keyword is None:
         return f'(from:{username}) until:{end_date} since:{start_date}'
-        
-    else:
+
+    elif username is not None and keyword is not None:
         return f"'{keyword}' (from:{username}) until:{end_date} since:{start_date}"
+
+    else:
+        raise KeyError('please specify a keyword or twitter@')
+        
 
 
 

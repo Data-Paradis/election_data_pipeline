@@ -1,11 +1,18 @@
 
 
 # consider implementing a dataclass for the data being scraped to ensure some level of consistency
-# make query tests more robust
+# make query tests more
+# # clean data of emoji and other impurities robust
+
 # geolocate tweets?
 # data schema for data going to the database to show relationships between fields
 # deal with duplicate data
 # different document in the collection for sources, and persons of interest
+# update readme
+# different database solution like HarperDB or Postgres
+# automated and deployed
+
+
 
 
 
@@ -58,10 +65,10 @@ ends = "2022-12-09"
 
 if __name__ == '__main__':
     # query = twt.make_query(starts, ends, 'namedToobi', 'Elon')
-    # results = twt.catch_up(query=query, limit=10)
+    # results = twt.historic_scrape(query=query, limit=10)
 
-    resultants = twt.stream_tweets(api, 'namedToobi', 2)
+    resultants = twt.get_user_tl(api, 'namedToobi', 2)
     pprint(resultants)
-    send_to_db(resultants, 'election_data', 'twitter_scrape')
+    # send_to_db(resultants, 'election_data', 'twitter_scrape')
     
     

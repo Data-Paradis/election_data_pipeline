@@ -1,5 +1,5 @@
 import pytest
-from src.sources.twitter_scraper import make_query, catch_up, stream_tweets
+from src.sources.twitter_scraper import make_query, historic_scrape, get_user_tl
 from snscrape.modules.twitter import TwitterSearchScraper
 from types import SimpleNamespace
 from tweepy import API, OAuth1UserHandler 
@@ -81,9 +81,9 @@ def test_make_query_with_keyword_and_username():
     assert 'random_user' and starts and ends and 'python' in query
 
 
-def test_catch_up(monkeypatch, approx_content) -> None:
+def test_historic_scrape(monkeypatch, approx_content) -> None:
     """
-    Tests the default behavior of the catch_up() method."""
+    Tests the default behavior of the historic_scrape() method."""
     
     # test parameters
     test_date_start = "2022-05-17"
@@ -97,7 +97,7 @@ def test_catch_up(monkeypatch, approx_content) -> None:
     monkeypatch.setattr(TwitterSearchScraper, "get_items", lambda query: approx_content)
 
     # call functionality
-    test_return = catch_up(my_query)
+    test_return = historic_scrape(my_query)
 
     # assertions
     assert type(test_return) == list
@@ -109,8 +109,8 @@ def test_catch_up(monkeypatch, approx_content) -> None:
     assert username == test_return[0]["source"]
 
 
-def test_catch_up_limit(monkeypatch, approx_content) -> None:
-    """Tests the catch_up() method with a limit.
+def test_historic_scrape_limit(monkeypatch, approx_content) -> None:
+    """Tests the historic_scrape() method with a limit.
     """
 
      # test parameters
@@ -125,7 +125,7 @@ def test_catch_up_limit(monkeypatch, approx_content) -> None:
     monkeypatch.setattr(TwitterSearchScraper, "get_items", lambda query: approx_content)
 
      # call functionality
-    test_return = catch_up(my_query, limit=5)
+    test_return = historic_scrape(my_query, limit=5)
 
     # assertions
     assert type(test_return) == list
@@ -137,7 +137,7 @@ def test_catch_up_limit(monkeypatch, approx_content) -> None:
     assert str == type(test_return[0]["source"])
 
 
-def test_stream_tweets(monkeypatch):
+def test_get_user_tl(monkeypatch):
     """Tests the tweet streaming functionality"""
 
     # similar content structure
@@ -167,7 +167,7 @@ def test_stream_tweets(monkeypatch):
     test_api = API(faux_auth, wait_on_rate_limit=True)
 
     # call the function to be tested
-    test_results = stream_tweets(twitter_api=test_api, tweet_count=2, username="Random User")
+    test_results = get_user_tl(twitter_api=test_api, tweet_count=2, username="Random User")
 
     assert list == type(test_results)
     assert "date" in list(test_results[0].keys())

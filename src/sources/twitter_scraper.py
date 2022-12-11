@@ -30,7 +30,7 @@ def make_query(start_date: str, end_date: str, username: str=None, keyword: str=
 
 
 
-def catch_up(query, limit=200):
+def historic_scrape(query, limit=200):
     """Gets the last 200 tweets from the specified query and returns them as a list.
 
     Args:
@@ -58,7 +58,7 @@ def catch_up(query, limit=200):
     return tweets
 
 
-def stream_tweets(twitter_api, username, tweet_count) -> list:
+def get_user_tl(twitter_api, username, tweet_count) -> list:
     """Gets the last n tweets from the specified user and returns them as a list.
 
     Args:

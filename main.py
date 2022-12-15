@@ -13,6 +13,11 @@
 # automated and deployed
 
 
+# snscrape may not have reliable location information
+# add more fields to the source data class
+# use a tree structure for source collection
+# find out how to modify default ids from mongodb
+
 
 
 
@@ -36,12 +41,13 @@
 
 
 
-
+from dataclasses import asdict
 import os
 from src.sources import twitter_scraper as twt
 import tweepy
 from pprint import pprint
 from dotenv import load_dotenv
+
 from src.database import send_to_db
 load_dotenv()
 
@@ -64,11 +70,14 @@ ends = "2022-12-09"
 
 
 if __name__ == '__main__':
-    # query = twt.make_query(starts, ends, 'namedToobi', 'Elon')
-    # results = twt.historic_scrape(query=query, limit=10)
+    query = twt.make_query(starts, ends, 'TechPidgin1')
+    results = twt.historic_scrape(query=query, limit=2)
+    # pprint(results)
+    dict_results = [asdict(content) for content in results]
+    pprint(dict_results)
 
-    resultants = twt.get_user_tl(api, 'namedToobi', 2)
-    pprint(resultants)
+    # resultants = twt.get_user_tl(api, 'namedToobi', 1)
+    # pprint(resultants)
     # send_to_db(resultants, 'election_data', 'twitter_scrape')
     
     

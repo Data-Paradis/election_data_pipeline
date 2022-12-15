@@ -1,7 +1,7 @@
 
 from snscrape.modules.twitter import TwitterSearchScraper
 from datetime import datetime
-
+from src.data import Content
 
 def make_query(start_date: str, end_date: str, username: str=None, keyword: str=None):
     """Constructs a query string depending on the parameters supplied
@@ -49,11 +49,18 @@ def historic_scrape(query, limit=200):
             break
         else:
             # else append the tweet to the list of tweets
-            tweets.append({"date": tweet.date,
-                           "source": tweet.user.username,
-                           "text": tweet.content,
-                           "date_scraped": datetime.now(),
-                           "link": tweet.url})
+            # tweets.append({"date": tweet.date,
+            #                "source": tweet.user.username,
+            #                "text": tweet.content,
+            #                "date_scraped": datetime.now(),
+            #                "link": tweet.url})
+        
+            contents = Content(date=tweet.date.strftime("%m-%d-%Y"),
+                                source=tweet.user.username,
+                                content=tweet.content,
+                                date_scraped=datetime.now().strftime("%m-%d-%Y"),
+                                link=tweet.url)
+            tweets.append(contents)
     
     return tweets
 
@@ -76,10 +83,18 @@ def get_user_tl(twitter_api, username, tweet_count) -> list:
     user_tl = twitter_api.user_timeline(user_id=user_info.id, count=tweet_count, tweet_mode="extended", include_rts="false")
 
     # filter the timeline for tweets=oo
-    results = [{"date": tweet.created_at.strftime("%m-%d-%Y"),
-                "source": tweet.user.name,
-                "text": tweet.full_text,
-                "date_scraped": datetime.now().strftime("%m-%d-%Y")} 
+    # results = [{"date": tweet.created_at.strftime("%m-%d-%Y"),
+    #             "source": tweet.user.name,
+    #             "text": tweet.full_text,
+    #             "date_scraped": datetime.now().strftime("%m-%d-%Y"),
+    #             "link": f'https://twitter.com/{tweet.user.screen_name}/status/{tweet.id_str}'} 
+    #             for tweet in user_tl]
+
+    results = [Content(date=tweet.created_at.strftime("%m-%d-%Y"),
+                        source=tweet.user.screen_name,
+                        content=tweet.full_text,
+                        date_scraped=datetime.now().strftime("%m-%d-%Y"),
+                        link=f'https://twitter.com/{tweet.user.screen_name}/status/{tweet.id_str}')
                 for tweet in user_tl]
 
     return results

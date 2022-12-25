@@ -8,8 +8,7 @@ load_dotenv()
 my_db = os.getenv("MONGODB_ATLAS")
 client = MongoClient(my_db)
 
-# client['twitter_scrape'].create_index([("mike", pymongo.DESCENDING),
-#                             ("eliot", pymongo.ASCENDING)])
+
 
 def send_to_db(data, collection_name, doc_name):
 
@@ -20,3 +19,9 @@ def send_to_db(data, collection_name, doc_name):
         print('done with data push')
     except Exception as e:
         print(f'database push failed with exception {e}')
+
+
+if __name__ == '__main__':
+    my_collection = client['election_data']
+    my_collection['twitter_scrape'].create_index([("source", pymongo.DESCENDING),
+                            ("link", pymongo.ASCENDING)])

@@ -56,6 +56,7 @@ def historic_scrape(query, limit=200):
             #                "link": tweet.url})
         
             contents = Content(date=tweet.date.strftime("%m-%d-%Y"),
+                                name=tweet.user.displayname,
                                 source=tweet.user.username,
                                 content=tweet.content,
                                 date_scraped=datetime.now().strftime("%m-%d-%Y"),
@@ -94,7 +95,9 @@ def get_user_tl(twitter_api, username, tweet_count) -> list:
                         source=tweet.user.screen_name,
                         content=tweet.full_text,
                         date_scraped=datetime.now().strftime("%m-%d-%Y"),
-                        link=f'https://twitter.com/{tweet.user.screen_name}/status/{tweet.id_str}')
+                        link=f'https://twitter.com/{tweet.user.screen_name}/status/{tweet.id_str}',
+                        name=tweet.user.name)
                 for tweet in user_tl]
+
 
     return results

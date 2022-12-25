@@ -7,6 +7,7 @@ from typing import Optional
 class SourcesOfInterest:
 
     name: str
+    handle: str
     affiliation: bool
     candidate: bool
     party: str
@@ -17,6 +18,7 @@ class SourcesOfInterest:
 class Content:
     
     date: datetime
+    name: str
     source: str
     content: str
     date_scraped: datetime
